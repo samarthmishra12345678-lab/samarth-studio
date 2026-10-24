@@ -35,8 +35,7 @@ function nav() {
       <nav class="nav">
         <a href="/work">Work types</a>
         ${u ? `<a href="/book">Book a site</a><a href="/account">Account</a>` : `<a href="/login">Login</a>`}
-        <a href="/admin">Inbox</a>
-        ${u ? `<button class="btn ghost" id="logout">Log out</button>` : `<a class="btn" href="/login">Login with Google</a>`}
+        ${u ? `<button class="btn ghost" id="logout">Log out</button>` : `<a class="btn" href="/login">Login</a>`}
       </nav>
     </header>`;
 }
@@ -49,7 +48,7 @@ function home() {
         <div class="kicker">Independent web builder</div>
         <h1>Sites people can actually book you from.</h1>
         <p class="lede">I design and ship landing pages, school sites, catalogues, and login dashboards. You pick a type, leave your brief, I call you back.</p>
-        <p><a class="btn accent" href="${state.user ? "/book" : "/login"}">${state.user ? "Book a build" : "Login with Google"}</a>
+        <p><a class="btn accent" href="${state.user ? "/book" : "/login"}">${state.user ? "Book a build" : "Login"}</a>
            <a class="btn ghost" href="/work">See website types</a></p>
       </div>
       <div class="stat-row">
@@ -84,23 +83,22 @@ function home() {
 }
 
 function loginPage() {
-  const extra = state.config.googleReady
-    ? ""
-    : `<p class="or">Google Client ID is not set on the server yet. Use the form below only to test the rest of the site.</p>
-        <form id="demo">
-          <div class="field"><label>Full name</label><input name="name" required /></div>
-          <div class="field"><label>Email</label><input name="email" type="email" required /></div>
-          <button class="btn" type="submit">Continue</button>
-        </form>`;
   return `
     ${nav()}
     <div class="login-wrap">
       <div class="kicker">Client access</div>
-      <h1>Login, then send a brief.</h1>
-      <p class="note">Sign in with Google so this studio receives a verified name and email. After login you pick a website type and write what you need.</p>
-      <div class="gbox" id="gbtn"></div>
+      <h1>Create account or log in</h1>
+      <p class="note">Email and password. Password 8 to 72 characters. Five wrong passwords lock that email for 15 minutes.</p>
+      <form id="auth">
+        <div class="field"><label>Full name (new accounts)</label><input name="name" autocomplete="name" /></div>
+        <div class="field"><label>Email</label><input name="email" type="email" required autocomplete="username" /></div>
+        <div class="field"><label>Password</label><input name="password" type="password" required minlength="8" maxlength="72" autocomplete="current-password" /></div>
+        <p>
+          <button class="btn accent" type="submit" data-mode="login">Log in</button>
+          <button class="btn ghost" type="submit" data-mode="register">Create account</button>
+        </p>
+      </form>
       <p class="err" id="gerr"></p>
-      ${extra}
     </div>
     ${footer()}`;
 }
@@ -166,13 +164,9 @@ function adminPage() {
     <section class="section">
       <div class="kicker">Studio inbox</div>
       <h2>Who logged in, who booked</h2>
-      <form id="pinrow" class="field" style="max-width:280px">
-        <label>Admin PIN</label>
-        <input name="pin" type="password" value="${sessionStorage.getItem("adminPin") || ""}" />
-        <button class="btn" type="submit">Open inbox</button>
-      </form>
+      <p class="note">This page opens only from your private dashboard link. Bookmark that link.</p>
       <p class="err" id="aerr"></p>
-      <div id="board"></div>
+      <div id="board">Loading…</div>
     </section>${footer()}`;
 }
 
@@ -190,7 +184,7 @@ function render() {
   if (path === "/login") root.innerHTML = loginPage();
   else if (path === "/book") root.innerHTML = bookPage();
   else if (path === "/account") root.innerHTML = accountPage();
-  else if (path === "/admin") root.innerHTML = adminPage();
+  else if (path === "/desk" || path === "/admin") root.innerHTML = adminPage();
   else root.innerHTML = home();
   bind();
 }
@@ -209,18 +203,25 @@ function bind() {
   const lo = document.getElementById("logout");
   if (lo) lo.onclick = async () => { await api("/api/auth/logout", { method: "POST", body: "{}" }); state.user = null; history.pushState({}, "", "/"); render(); };
 
-  if (location.pathname === "/login") setupGoogle();
-  const demo = document.getElementById("demo");
-  if (demo) demo.onsubmit = async (e) => {
-    e.preventDefault();
-    const fd = new FormData(demo);
-    try {
-      const data = await api("/api/auth/demo", { method: "POST", body: JSON.stringify({ name: fd.get("name"), email: fd.get("email") }) });
-      state.user = data.user;
-      history.pushState({}, "", "/book");
-      render();
-    } catch (err) { document.getElementById("gerr").textContent = err.message; }
-  };
+  const auth = document.getElementById("auth");
+  if (auth) {
+    let mode = "login";
+    auth.querySelectorAll("[data-mode]").forEach((b) => {
+      b.addEventListener("click", () => { mode = b.getAttribute("data-mode"); });
+    });
+    auth.onsubmit = async (e) => {
+      e.preventDefault();
+      const fd = new FormData(auth);
+      const body = { name: fd.get("name"), email: fd.get("email"), password: fd.get("password") };
+      const path = mode === "register" ? "/api/auth/register" : "/api/auth/login";
+      try {
+        const data = await api(path, { method: "POST", body: JSON.stringify(body) });
+        state.user = data.user;
+        history.pushState({}, "", "/book");
+        render();
+      } catch (err) { document.getElementById("gerr").textContent = err.message; }
+    };
+  }
 
   const order = document.getElementById("order");
   if (order) order.onsubmit = async (e) => {
@@ -235,11 +236,7 @@ function bind() {
   };
 
   if (location.pathname === "/account") loadMine();
-  if (location.pathname === "/admin") {
-    const pinrow = document.getElementById("pinrow");
-    pinrow.onsubmit = (e) => { e.preventDefault(); sessionStorage.setItem("adminPin", pinrow.pin.value); loadAdmin(); };
-    if (sessionStorage.getItem("adminPin")) loadAdmin();
-  }
+  if (location.pathname === "/admin" || location.pathname === "/desk") loadAdmin();
 }
 
 async function loadMine() {
@@ -254,10 +251,9 @@ async function loadMine() {
 }
 
 async function loadAdmin() {
-  const pin = sessionStorage.getItem("adminPin") || "";
   const board = document.getElementById("board");
   try {
-    const data = await api("/api/admin/overview", { headers: { "x-admin-pin": pin } });
+    const data = await api("/api/admin/overview");
     document.getElementById("aerr").textContent = "";
     board.innerHTML = `
       <p><b>${data.stats.users}</b> people · <b>${data.stats.logins}</b> logins · <b>${data.stats.orders}</b> briefs (${data.stats.newOrders} new)</p>
@@ -276,7 +272,7 @@ async function loadAdmin() {
       }</tbody></table>`;
     board.querySelectorAll("select[data-oid]").forEach((sel) => {
       sel.onchange = () => api("/api/admin/orders/" + sel.dataset.oid + "/status", {
-        method: "POST", headers: { "x-admin-pin": pin, "Content-Type": "application/json" },
+        method: "POST",
         body: JSON.stringify({ status: sel.value }),
       });
     });

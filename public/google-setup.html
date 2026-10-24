@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Google login setup</title>
+  <style>
+    body { margin: 0; font-family: "Segoe UI", sans-serif; background: #f4efe6; color: #1c1914; line-height: 1.5; }
+    main { max-width: 720px; margin: 0 auto; padding: 32px 20px 64px; }
+    h1 { font-family: Georgia, serif; font-weight: 400; font-size: 36px; }
+    h2 { font-size: 20px; margin-top: 28px; }
+    .step { border: 1px solid #d9d0c3; background: #fffdfa; padding: 16px 18px; margin: 12px 0; }
+    .n { font-size: 12px; letter-spacing: .12em; text-transform: uppercase; color: #9a3b2f; }
+    code { background: #efe8dc; padding: 1px 6px; }
+    a { color: #9a3b2f; }
+  </style>
+</head>
+<body>
+  <main>
+    <p class="n">Do this on your Chrome, signed into Gmail</p>
+    <h1>Google login setup (about 8 minutes)</h1>
+    <p>I cannot open your Google account. You create one Client ID. Then paste it here. After that I put it on the server and publish (no custom domain).</p>
+
+    <div class="step">
+      <div class="n">Step 1</div>
+      <h2>Open Google Cloud</h2>
+      <p>Go to <a href="https://console.cloud.google.com/apis/credentials" target="_blank" rel="noopener">console.cloud.google.com/apis/credentials</a>. Sign in with the Gmail you want as studio owner.</p>
+    </div>
+    <div class="step">
+      <div class="n">Step 2</div>
+      <h2>Create a project</h2>
+      <p>Top bar project name → <b>New project</b> → name <code>Samarth Studio</code> → Create. Select that project.</p>
+    </div>
+    <div class="step">
+      <div class="n">Step 3</div>
+      <h2>OAuth consent screen</h2>
+      <p>Left menu: <b>APIs and services</b> → <b>OAuth consent screen</b> (sometimes called Google Auth platform).</p>
+      <p>User type: <b>External</b> → Create.</p>
+      <p>App name: <code>Samarth Mishra Web Studio</code><br />User support email: your Gmail<br />Developer contact: your Gmail → Save.</p>
+      <p>Scopes: keep email, profile, openid (default). Save.</p>
+      <p>Test users: Add your Gmail. Save. Publishing status can stay Testing while you try it. Later click Publish app so any client can log in.</p>
+    </div>
+    <div class="step">
+      <div class="n">Step 4</div>
+      <h2>Create Web Client ID</h2>
+      <p>Credentials → <b>Create credentials</b> → <b>OAuth client ID</b>.</p>
+      <p>Application type: <b>Web application</b>. Name: <code>Studio web</code>.</p>
+      <p><b>Authorized JavaScript origins</b> (Add URI), two lines after publish (I will send the exact Vercel URL). For now add:</p>
+      <p><code>http://localhost:3000</code></p>
+      <p>Leave Authorized redirect URIs empty for Google Identity Services button (we use ID token, not redirect).</p>
+      <p>Create. Copy <b>Client ID</b> only (ends with <code>.apps.googleusercontent.com</code>). Do not send Client Secret in chat if you can avoid it. We only need Client ID.</p>
+    </div>
+    <div class="step">
+      <div class="n">Step 5</div>
+      <h2>Send it here</h2>
+      <p>Paste the Client ID in the next message. I will put it in server env, add the live Vercel origin in your Cloud console (I will tell you the exact URL), then publish without a custom domain.</p>
+    </div>
+    <p>Dashboard for you after publish: a private link <code>/d/…long-token…</code>. Bookmark it. No Google login needed for that inbox. Do not share it.</p>
+  </main>
+</body>
+</html>

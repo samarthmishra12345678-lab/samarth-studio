@@ -51,6 +51,15 @@ db.exec(`
     status TEXT NOT NULL DEFAULT 'new',
     created_at TEXT NOT NULL
   );
+  CREATE TABLE IF NOT EXISTS failed_logins (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    email TEXT NOT NULL,
+    ip TEXT,
+    at TEXT NOT NULL
+  );
 `);
+
+try { db.exec("ALTER TABLE users ADD COLUMN password_hash TEXT"); } catch (_) {}
+try { db.exec("ALTER TABLE users ADD COLUMN locked_until TEXT"); } catch (_) {}
 
 module.exports = db;
