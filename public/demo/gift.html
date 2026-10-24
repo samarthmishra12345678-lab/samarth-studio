@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Demo · Gift shop</title>
+  <link rel="icon" href="/favicon.svg" />
+  <style>
+    * { box-sizing: border-box; }
+    body { margin: 0; font-family: "Segoe UI", sans-serif; background: #e7efe8; color: #16301c; }
+    .bar { display: flex; justify-content: space-between; padding: 12px 20px; background: #16301c; color: #e7efe8; font-size: 13px; }
+    .bar a { color: #e7efe8; }
+    .hero { padding: 48px 28px 20px; max-width: 900px; margin: 0 auto; }
+    h1 { font-size: 48px; font-weight: 500; margin: 0 0 10px; }
+    .box { width: 160px; height: 110px; background: #c45c4a; margin: 20px 0 8px; position: relative; animation: bob 2.8s ease-in-out infinite; }
+    .box:before { content: ""; position: absolute; left: 70px; top: 0; bottom: 0; width: 20px; background: #f2e2a2; }
+    .box:after { content: ""; position: absolute; top: 44px; left: 0; right: 0; height: 20px; background: #f2e2a2; }
+    @keyframes bob { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-8px); } }
+    .tabs { max-width: 900px; margin: 0 auto; padding: 0 28px 40px; }
+    .tabs button { border: 1px solid #16301c; background: transparent; padding: 8px 12px; margin-right: 6px; cursor: pointer; }
+    .tabs button.on { background: #16301c; color: #e7efe8; }
+    .grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; margin-top: 18px; }
+    .card { background: #fff; border: 1px solid #b7cbb9; padding: 16px; min-height: 120px; }
+  </style>
+</head>
+<body>
+  <div class="bar"><span>Demo site · Gift hamper shop (3 slides)</span><a href="/">Back to studio</a></div>
+  <div class="hero">
+    <p style="letter-spacing:.16em;text-transform:uppercase;font-size:12px;">Sitabuldi counter</p>
+    <h1>Packed gifts. Named, dated, ready to carry.</h1>
+    <div class="box"></div>
+    <p>Tea, notebooks, soap, and a card with the recipient’s name. Same-day wrap if you order before 3 pm.</p>
+  </div>
+  <div class="tabs">
+    <button type="button" class="on" data-i="0">Hampers</button>
+    <button type="button" data-i="1">Occasions</button>
+    <button type="button" data-i="2">Pickup</button>
+    <div id="panel" class="grid"></div>
+  </div>
+  <script>
+    const views = [
+      `<div class="card"><b>Desk hamper</b><p>Notebook, pen, tea. Rs 650.</p></div><div class="card"><b>Kitchen hamper</b><p>Spice tins and a cloth. Rs 890.</p></div><div class="card"><b>New baby</b><p>Muslin and soap. Rs 720.</p></div>`,
+      `<div class="card"><b>Birthday</b><p>Card plus one hamper. Name printed the same afternoon.</p></div><div class="card"><b>Housewarming</b><p>Board and tea.</p></div><div class="card"><b>Teacher</b><p>Plain wrap, no glitter.</p></div>`,
+      `<div class="card"><b>Counter</b><p>Sitabuldi, 11 am to 8 pm.</p></div><div class="card"><b>Hold</b><p>WhatsApp the name on the card. We hold 24 hours.</p></div><div class="card"><b>Demo note</b><p>Buttons on this page change the three cards. A live shop would take orders.</p></div>`
+    ];
+    const panel = document.getElementById("panel");
+    const btns = [...document.querySelectorAll(".tabs button")];
+    panel.innerHTML = views[0];
+    btns.forEach((b) => b.onclick = () => {
+      panel.innerHTML = views[Number(b.dataset.i)];
+      btns.forEach((x) => x.classList.toggle("on", x === b));
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Demo · Birthday invitation</title>
+  <link rel="icon" href="/favicon.svg" />
+  <style>
+    * { box-sizing: border-box; }
+    body { margin: 0; font-family: Georgia, "Times New Roman", serif; background: #3b1d27; color: #f7e6d8; }
+    .bar { display: flex; justify-content: space-between; align-items: center; padding: 12px 20px; background: #2a141c; font-family: "Segoe UI", sans-serif; font-size: 13px; }
+    .bar a { color: #f7e6d8; }
+    .stage { max-width: 880px; margin: 28px auto; overflow: hidden; border: 1px solid #6a3a48; background: #4a2431; min-height: 520px; position: relative; }
+    .track { display: flex; width: 400%; transition: transform .55s ease; }
+    .slide { width: 25%; padding: 56px 48px; min-height: 520px; }
+    h1 { font-size: 52px; margin: 8px 0 12px; font-weight: 400; }
+    p { line-height: 1.6; max-width: 46ch; }
+    .k { letter-spacing: .2em; text-transform: uppercase; font-size: 12px; font-family: "Segoe UI", sans-serif; color: #e8b4a2; }
+    .dots { text-align: center; padding: 16px; font-family: "Segoe UI", sans-serif; }
+    button { font-family: "Segoe UI", sans-serif; border: 1px solid #f7e6d8; background: transparent; color: #f7e6d8; padding: 10px 16px; cursor: pointer; margin: 0 4px; }
+    button.on { background: #f7e6d8; color: #3b1d27; }
+    .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+    .tile { border: 1px solid #6a3a48; padding: 18px; background: #3b1d27; }
+    form { display: grid; gap: 10px; max-width: 360px; }
+    input { padding: 10px; border: 1px solid #6a3a48; background: #2a141c; color: #f7e6d8; }
+    .cake { width: 120px; height: 90px; margin: 24px 0; background: #f7e6d8; position: relative; }
+    .cake:before { content: ""; position: absolute; top: -28px; left: 20px; right: 20px; height: 28px; background: #e8b4a2; }
+    .cake:after { content: ""; position: absolute; top: -48px; left: 54px; width: 8px; height: 22px; background: #f4d35e; box-shadow: 20px 0 #f4d35e, -20px 0 #f4d35e; }
+  </style>
+</head>
+<body>
+  <div class="bar"><span>Demo site · Birthday invitation (4 slides)</span><a href="/">Back to studio</a></div>
+  <div class="stage">
+    <div class="track" id="track">
+      <section class="slide">
+        <div class="k">Saturday · 8 November 2026</div>
+        <h1>Aarav turns sixteen.</h1>
+        <div class="cake"></div>
+        <p>Lawn at the Mishra house, Civil Lines, Nagpur. 7:00 pm. Music till ten. Come hungry.</p>
+      </section>
+      <section class="slide">
+        <div class="k">The evening</div>
+        <h1>Four hours. One cake.</h1>
+        <div class="grid">
+          <div class="tile"><b>7:00</b><p>Guests, lemonade, playlist.</p></div>
+          <div class="tile"><b>8:00</b><p>Cake, sixteen candles, no speeches longer than a minute.</p></div>
+          <div class="tile"><b>8:30</b><p>Dinner. Veg and non-veg thali.</p></div>
+          <div class="tile"><b>9:30</b><p>Open floor. Home by ten.</p></div>
+        </div>
+      </section>
+      <section class="slide">
+        <div class="k">RSVP</div>
+        <h1>Are you coming?</h1>
+        <form onsubmit="event.preventDefault(); this.querySelector('p').textContent='Noted. See you on the 8th.';">
+          <input placeholder="Your name" required />
+          <input placeholder="How many people" />
+          <button type="submit">Send RSVP</button>
+          <p></p>
+        </form>
+      </section>
+      <section class="slide">
+        <div class="k">If you cannot make it</div>
+        <h1>A message is enough.</h1>
+        <p>No gifts required. If you want to bring something, Aarav reads paper books and drinks cold coffee. Thank you for being part of the year.</p>
+      </section>
+    </div>
+  </div>
+  <div class="dots">
+    <button type="button" class="on" data-i="0">1 Invite</button>
+    <button type="button" data-i="1">2 Evening</button>
+    <button type="button" data-i="2">3 RSVP</button>
+    <button type="button" data-i="3">4 Thanks</button>
+  </div>
+  <script>
+    const track = document.getElementById("track");
+    const btns = [...document.querySelectorAll(".dots button")];
+    btns.forEach((b) => b.onclick = () => {
+      track.style.transform = "translateX(" + (-25 * Number(b.dataset.i)) + "%)";
+      btns.forEach((x) => x.classList.toggle("on", x === b));
+    });
+  </script>
+</body>
+</html>

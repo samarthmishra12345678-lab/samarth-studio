@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Demo · Professional firm</title>
+  <link rel="icon" href="/favicon.svg" />
+  <style>
+    * { box-sizing: border-box; }
+    body { margin: 0; font-family: "Segoe UI", sans-serif; background: #f3f1ec; color: #1b1b1b; }
+    .bar { display: flex; justify-content: space-between; padding: 12px 20px; background: #1b1b1b; color: #f3f1ec; font-size: 13px; }
+    .bar a { color: #f3f1ec; }
+    header { display: flex; justify-content: space-between; padding: 20px 40px; border-bottom: 1px solid #d7d2c8; }
+    nav button { border: 0; background: none; padding: 8px 10px; cursor: pointer; font: inherit; }
+    nav button.on { border-bottom: 2px solid #1b1b1b; }
+    main { max-width: 900px; margin: 0 auto; padding: 48px 28px; min-height: 420px; }
+    h1 { font-size: 44px; font-weight: 500; margin: 0 0 12px; }
+    .muted { color: #555; max-width: 50ch; line-height: 1.55; }
+    .cols { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px; margin-top: 28px; }
+    .cols div { border: 1px solid #d7d2c8; padding: 16px; background: #fff; }
+    form { display: grid; gap: 10px; max-width: 400px; }
+    input, textarea { padding: 10px; border: 1px solid #d7d2c8; font: inherit; }
+    .go { background: #1b1b1b; color: #fff; border: 0; padding: 10px 14px; cursor: pointer; }
+  </style>
+</head>
+<body>
+  <div class="bar"><span>Demo site · Professional practice (3 slides)</span><a href="/">Back to studio</a></div>
+  <header>
+    <strong>Mehta &amp; Rao · Chartered accountants</strong>
+    <nav>
+      <button type="button" class="on" data-i="0">Practice</button>
+      <button type="button" data-i="1">Work</button>
+      <button type="button" data-i="2">Write to us</button>
+    </nav>
+  </header>
+  <main id="main"></main>
+  <script>
+    const pages = [
+      `<p style="letter-spacing:.14em;text-transform:uppercase;font-size:12px;">Nagpur · since 2009</p>
+       <h1>Accounts, GST, and company filings without theatre.</h1>
+       <p class="muted">Two partners. We keep books for shops, clinics, and private limited companies. Appointments on weekdays, 10 to 6.</p>
+       <div class="cols"><div><b>GST</b><p class="muted">Returns and notices.</p></div><div><b>Audit</b><p class="muted">Statutory and internal.</p></div><div><b>Payroll</b><p class="muted">PF, ESI, Form 16.</p></div></div>`,
+      `<h1>Who we already serve</h1>
+       <p class="muted">This demo lists categories, not fake client names or rupee counters.</p>
+       <div class="cols"><div>Retail shops</div><div>Clinics</div><div>Private limited companies</div></div>`,
+      `<h1>Write to the office</h1>
+       <form onsubmit="event.preventDefault(); this.querySelector('p').textContent='This is a demo form. On a live site it would email the firm.';">
+         <input placeholder="Name" required />
+         <input placeholder="Email" type="email" required />
+         <textarea rows="4" placeholder="What you need filed"></textarea>
+         <button class="go" type="submit">Send</button>
+         <p class="muted"></p>
+       </form>`
+    ];
+    const main = document.getElementById("main");
+    main.innerHTML = pages[0];
+    const btns = [...document.querySelectorAll("nav button")];
+    btns.forEach((b) => b.onclick = () => {
+      main.innerHTML = pages[Number(b.dataset.i)];
+      btns.forEach((x) => x.classList.toggle("on", x === b));
+    });
+  </script>
+</body>
+</html>

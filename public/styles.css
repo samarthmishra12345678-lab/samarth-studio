@@ -1,0 +1,83 @@
+:root {
+  --ink: #1c1914;
+  --paper: #f4efe6;
+  --card: #fffdfa;
+  --line: #d9d0c3;
+  --muted: #6b645a;
+  --accent: #9a3b2f;
+  --accent-2: #2f4a3c;
+  --gold: #b08d57;
+}
+* { box-sizing: border-box; }
+html, body { margin: 0; min-height: 100%; background: var(--paper); color: var(--ink); }
+body {
+  font-family: "IBM Plex Sans", system-ui, sans-serif;
+  font-size: 16px;
+  line-height: 1.5;
+}
+h1, h2, h3, .serif { font-family: "Instrument Serif", Georgia, serif; font-weight: 400; }
+a { color: inherit; }
+button, input, select, textarea { font: inherit; }
+.top {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 18px 28px; border-bottom: 1px solid var(--line);
+  background: var(--paper);
+}
+.brand { display: flex; align-items: baseline; gap: 12px; text-decoration: none; }
+.brand strong { letter-spacing: .08em; font-size: 13px; text-transform: uppercase; }
+.brand span { color: var(--muted); font-size: 13px; }
+.nav { display: flex; gap: 8px; align-items: center; }
+.btn {
+  border: 1px solid var(--ink); background: var(--ink); color: var(--paper);
+  padding: 9px 14px; cursor: pointer; border-radius: 0;
+}
+.btn.ghost { background: transparent; color: var(--ink); }
+.btn.accent { background: var(--accent); border-color: var(--accent); color: #fff; }
+.hero {
+  padding: 72px 28px 48px; max-width: 1100px; margin: 0 auto;
+  display: grid; grid-template-columns: 1.2fr .8fr; gap: 48px; align-items: end;
+}
+.kicker { letter-spacing: .18em; text-transform: uppercase; font-size: 12px; color: var(--accent); }
+.hero h1 { font-size: clamp(40px, 6vw, 72px); line-height: .95; margin: 10px 0 16px; }
+.lede { color: var(--muted); max-width: 42ch; }
+.stat-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.stat { border: 1px solid var(--line); padding: 16px; background: var(--card); }
+.stat b { display: block; font-size: 22px; font-family: "Instrument Serif", serif; }
+.section { max-width: 1100px; margin: 0 auto; padding: 28px; }
+.section h2 { font-size: 36px; margin: 0 0 8px; }
+.grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-top: 22px; }
+.card {
+  background: var(--card); border: 1px solid var(--line); padding: 20px; min-height: 210px;
+  display: flex; flex-direction: column; gap: 8px;
+}
+.card h3 { margin: 0; font-size: 26px; }
+.card p { margin: 0; color: var(--muted); flex: 1; }
+.price { font-size: 13px; letter-spacing: .04em; color: var(--accent-2); }
+.login-wrap {
+  max-width: 480px; margin: 72px auto; background: var(--card);
+  border: 1px solid var(--line); padding: 36px;
+}
+.login-wrap h1 { margin: 8px 0 8px; font-size: 40px; }
+.field { display: flex; flex-direction: column; gap: 6px; margin: 12px 0; }
+.field label { font-size: 12px; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); }
+.field input, .field select, .field textarea {
+  border: 1px solid var(--line); background: #fff; padding: 10px 12px; border-radius: 0;
+}
+.gbox { min-height: 44px; display: flex; justify-content: center; margin: 16px 0; }
+.or { text-align: center; color: var(--muted); font-size: 13px; margin: 10px 0; }
+.table { width: 100%; border-collapse: collapse; font-size: 14px; }
+.table th, .table td { text-align: left; padding: 10px 8px; border-bottom: 1px solid var(--line); vertical-align: top; }
+.table th { font-size: 11px; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); }
+.badge { display: inline-block; font-size: 11px; letter-spacing: .06em; text-transform: uppercase; border: 1px solid var(--line); padding: 2px 7px; }
+.footer { border-top: 1px solid var(--line); padding: 28px; color: var(--muted); font-size: 13px; }
+.note { font-size: 13px; color: var(--muted); }
+.err { color: var(--accent); font-size: 14px; }
+.ok { color: var(--accent-2); }
+.split { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+.legal h1 { font-size: 42px; margin: 8px 0 16px; }
+.legal h2 { font-size: 24px; margin: 28px 0 8px; }
+.legal p { max-width: 68ch; }
+@media (max-width: 860px) {
+  .hero, .grid, .split { grid-template-columns: 1fr; }
+  .top { flex-wrap: wrap; gap: 10px; }
+}

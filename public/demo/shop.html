@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Demo · 3D shop</title>
+  <link rel="icon" href="/favicon.svg" />
+  <style>
+    * { box-sizing: border-box; }
+    body { margin: 0; font-family: "Segoe UI", sans-serif; background: #111; color: #eee; }
+    .bar { display: flex; justify-content: space-between; padding: 12px 20px; background: #000; font-size: 13px; }
+    .bar a { color: #eee; }
+    .wrap { max-width: 1100px; margin: 0 auto; padding: 28px; display: grid; grid-template-columns: 1.1fr .9fr; gap: 36px; align-items: center; }
+    h1 { font-weight: 500; font-size: 40px; margin: 0 0 10px; }
+    .muted { color: #aaa; max-width: 40ch; }
+    .scene { perspective: 900px; height: 380px; display: flex; align-items: center; justify-content: center; }
+    .cube { width: 180px; height: 180px; position: relative; transform-style: preserve-3d; animation: spin 14s linear infinite; }
+    .face { position: absolute; width: 180px; height: 180px; display: flex; align-items: center; justify-content: center; font-size: 15px; letter-spacing: .08em; text-transform: uppercase; border: 1px solid #333; }
+    .f1 { background: #7a2e12; transform: rotateY(0deg) translateZ(90px); }
+    .f2 { background: #1f3d2b; transform: rotateY(90deg) translateZ(90px); }
+    .f3 { background: #1a2744; transform: rotateY(180deg) translateZ(90px); }
+    .f4 { background: #4a3b12; transform: rotateY(-90deg) translateZ(90px); }
+    .f5 { background: #2b2b2b; transform: rotateX(90deg) translateZ(90px); }
+    .f6 { background: #3d1f2b; transform: rotateX(-90deg) translateZ(90px); }
+    @keyframes spin { from { transform: rotateX(-12deg) rotateY(0); } to { transform: rotateX(-12deg) rotateY(360deg); } }
+    .row { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; margin-top: 22px; }
+    .p { border: 1px solid #333; padding: 14px; background: #1a1a1a; }
+    .p b { display: block; margin-bottom: 6px; }
+    button { border: 1px solid #eee; background: #eee; color: #111; padding: 10px 14px; cursor: pointer; }
+    .slides { display: flex; gap: 8px; margin-top: 16px; }
+    .slides button { background: transparent; color: #eee; }
+    .slides button.on { background: #eee; color: #111; }
+    #copy h2 { font-size: 22px; font-weight: 500; }
+  </style>
+</head>
+<body>
+  <div class="bar"><span>Demo site · Hardware shop with 3D product cube (3 slides)</span><a href="/">Back to studio</a></div>
+  <div class="wrap">
+    <div>
+      <div class="scene"><div class="cube">
+        <div class="face f1">Steel kettle</div>
+        <div class="face f2">Cast pan</div>
+        <div class="face f3">Oak board</div>
+        <div class="face f4">Wool throw</div>
+        <div class="face f5">Top</div>
+        <div class="face f6">Base</div>
+      </div></div>
+    </div>
+    <div>
+      <p style="letter-spacing:.16em;text-transform:uppercase;font-size:12px;color:#c9a227;">Civil Lines store</p>
+      <h1 id="title">Deshpande House Goods</h1>
+      <div id="copy">
+        <p class="muted">Kettles, pans, boards, throws. You can rotate the cube with your eye; stock is on the floor this week.</p>
+      </div>
+      <div class="slides">
+        <button type="button" class="on" data-s="0">1 Store</button>
+        <button type="button" data-s="1">2 This week</button>
+        <button type="button" data-s="2">3 Order</button>
+      </div>
+      <div class="row">
+        <div class="p"><b>Steel kettle</b>Rs 1,890</div>
+        <div class="p"><b>Cast pan</b>Rs 2,450</div>
+        <div class="p"><b>Oak board</b>Rs 1,200</div>
+      </div>
+    </div>
+  </div>
+  <script>
+    const slides = [
+      { t: "Deshpande House Goods", c: "<p class='muted'>Kettles, pans, boards, throws. The cube turns on its own so you can see four faces of the week’s stock.</p>" },
+      { t: "On the floor this week", c: "<p class='muted'>Twelve kettles, eight pans, six boards. WhatsApp the shop if you want one held till Saturday.</p>" },
+      { t: "How to order", c: "<p class='muted'>No cart. Message 98xxx xxxxx with the object name. Pickup from Civil Lines, 11 am to 7 pm.</p><p><button type='button'>Copy WhatsApp text</button></p>" }
+    ];
+    const btns = [...document.querySelectorAll(".slides button")];
+    btns.forEach((b) => b.onclick = () => {
+      const s = slides[Number(b.dataset.s)];
+      document.getElementById("title").textContent = s.t;
+      document.getElementById("copy").innerHTML = s.c;
+      btns.forEach((x) => x.classList.toggle("on", x === b));
+    });
+  </script>
+</body>
+</html>
